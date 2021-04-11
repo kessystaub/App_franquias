@@ -1,6 +1,8 @@
 package com.example.aplicativoandroid;
 
-public class ItemsModel {
+import java.io.Serializable;
+
+public class ItemsModel implements Serializable {
     private String name;
     private String desc;
     private int image;
