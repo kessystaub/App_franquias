@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
 
     int images[]= {R.drawable.mc, R.drawable.bobs, R.drawable.burguer, R.drawable.subway};
-    String names[]={"Mc Donals","Bobs","Burguer King","Subway"};
+    String names[]={"mc donals","bobs","burguer king","subway"};
     String desc[]={"amo muito tudo isso","pior que mc","melhor que mc","saudavel"};
 
     List<ItemsModel> listItems= new ArrayList();
@@ -122,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
             imageView.setImageResource(itemsModelListFiltered.get(position).getImage());
             itemName.setText(itemsModelListFiltered.get(position).getName());
             itemDesc.setText(itemsModelListFiltered.get(position).getDesc());
+
+            view.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this,ItemViewActivity.class).putExtra("item",itemsModelListFiltered.get(position)));
+                }
+            });
 
             return view;
         }
