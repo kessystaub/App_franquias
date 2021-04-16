@@ -1,12 +1,20 @@
-package com.example.aplicativoandroid;
+package com.example.myproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class ItemViewActivity extends AppCompatActivity {
 
@@ -14,23 +22,106 @@ public class ItemViewActivity extends AppCompatActivity {
     TextView textView;
 
     ItemsModel itemsModel;
+    Adapter2 adapter2;
+    ListView listviewrestaurante;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //imageView = findViewById(R.id.imageViewItem);
+        //textView = findViewById(R.id.textViewName);
+
+        Intent intent = getIntent();
+
+        this.itemsModel = intent.getParcelableExtra("item");
+
+        adapter2 = new Adapter2(this, (ArrayList<Restaurante>)itemsModel.restaurantes);
+        listviewrestaurante = findViewById(R.id.listview);
+        listviewrestaurante.setAdapter(adapter2);
+
+    }
+
+
+/*
+        if(intent.getExtras()!=null){
+            itemsModel = (ItemsModel) intent.getParcelableExtra("item");
+
+            //restaurante = itemsModel.getRestaurante(0);
+            imageView.setImageResource(itemsModel.getImage());
+            textView.setText(itemsModel.getName());
+
+        }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
 
-        imageView = findViewById(R.id.imageViewItem);
-        textView = findViewById(R.id.textViewName);
+        imageView = findViewById(R.id.imageView);
+        textView = findViewById(R.id.itemName);
 
         Intent intent = getIntent();
 
         if(intent.getExtras()!=null){
-            itemsModel = (ItemsModel) intent.getSerializableExtra("item");
+
+            itemsModel = (ItemsModel) intent.getParcelableExtra("item");
+
+            //itemsModel = (ItemsModel) intent.getSerializableExtra("item");
+            //for(int i=0;i<4;i++) {
+
+               //imageView.setImageResource(itemsModel.restaurantes.get(1).image);
+               //textView.setText(itemsModel.restaurantes.get(1).name);
+            //}
 
             imageView.setImageResource(itemsModel.getImage());
             textView.setText(itemsModel.getName());
 
         }
+    }*/
+}
+
+class Adapter2 extends BaseAdapter {
+
+    Activity context;
+    ArrayList<Restaurante> restaurantes;
+    private static LayoutInflater inflater = null;
+
+    public Adapter2(Activity context, ArrayList<Restaurante>restaurantes){
+        this.context = context;
+        this.restaurantes = restaurantes;
+        inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
+
+
+    @Override
+    public int getCount() {
+        return restaurantes.size();
+    }
+
+    @Override
+    public Restaurante getItem(int position) {
+        return restaurantes.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+         View itemview = convertView;
+         itemview = (itemview == null) ? inflater.inflate(R.layout.row_items,null): itemview;
+         TextView textViewName = (TextView) itemview.findViewById(R.id.itemName);
+         TextView textViewDesc = (TextView) itemview.findViewById(R.id.itemDesc);
+         ImageView imageview = itemview.findViewById(R.id.imageView);
+         Restaurante selectedRestaurante = restaurantes.get(position);
+         textViewName.setText(selectedRestaurante.name);
+         textViewDesc.setText(selectedRestaurante.desc);
+         return itemview;
+    }
+
 }
