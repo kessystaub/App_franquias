@@ -11,7 +11,7 @@ public class ItemsModel implements Parcelable {
     private String name;
     private String desc;
     private int image;
-    private Restaurante test;
+    public Restaurante test;
 
     public List<Restaurante> restaurantes = new ArrayList();
 
@@ -29,13 +29,13 @@ public class ItemsModel implements Parcelable {
         this.restaurantes.add(test);
         this.test=new Restaurante(restaurante.name,restaurante.desc,restaurante.image);
         this.restaurantes.add(test);
-
     }
 
     protected ItemsModel(Parcel in) {
         name = in.readString();
         desc = in.readString();
         image = in.readInt();
+        in.readTypedList(restaurantes, Restaurante.CREATOR);
     }
 
     public static final Creator<ItemsModel> CREATOR = new Creator<ItemsModel>() {
@@ -90,6 +90,6 @@ public class ItemsModel implements Parcelable {
         dest.writeString(name);
         dest.writeString(desc);
         dest.writeInt(image);
+        dest.writeTypedList(restaurantes);
     }
 }
-
