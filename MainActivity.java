@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         //restaurante = new Restaurante(names[0],desc[0],images[0]);
         //restaurantes.add(restaurante);
+        restaurante = new Restaurante("cleitin","ola",R.drawable.subway);
+        restaurantes.add(restaurante);
+
 
 
         super.onCreate(savedInstanceState);
@@ -48,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listview);
 
         for(int i = 0; i < names.length; i++){
-            restaurante = new Restaurante(names[i],desc[i],images[i]);
+            //restaurante = new Restaurante(names[i],desc[i],images[i]);
+            //funçao random 1 a 3
             ItemsModel itemsModel = new ItemsModel(names[i],desc[i],images[i],restaurante);
             franquias.add(itemsModel);
         }
@@ -90,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
     public class CustomAdapter extends BaseAdapter implements Filterable {
@@ -142,25 +148,26 @@ public class MainActivity extends AppCompatActivity {
             return view;
         }
 
+
         @Override
         public Filter getFilter() {
-            Filter filter = new Filter(){
+            Filter filter = new Filter() {
 
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
 
                     FilterResults filterResults = new FilterResults();
 
-                    if(constraint == null || constraint.length() == 0){
+                    if (constraint == null || constraint.length() == 0) {
                         filterResults.count = itemsModelList.size();
                         filterResults.values = itemsModelList;
-                    }else{
+                    } else {
                         String searchStr = constraint.toString().toLowerCase();
 
-                        List<ItemsModel>resultData = new ArrayList<>();
+                        List<ItemsModel> resultData = new ArrayList<>();
 
-                        for(ItemsModel itemsModel:itemsModelList){
-                            if(itemsModel.getName().contains(searchStr) || itemsModel.getDesc().contains(searchStr)){
+                        for (ItemsModel itemsModel : itemsModelList) {
+                            if (itemsModel.getName().contains(searchStr) || itemsModel.getDesc().contains(searchStr)) {
                                 resultData.add(itemsModel);
                             }
 
