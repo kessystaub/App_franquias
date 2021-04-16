@@ -1,11 +1,9 @@
-package com.example.aplicativoandroid;
+package com.example.myproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,24 +28,32 @@ public class MainActivity extends AppCompatActivity {
     String names[]={"mc donals","bobs","burguer king","subway"};
     String desc[]={"amo muito tudo isso","pior que mc","melhor que mc","saudavel"};
 
-    List<ItemsModel> listItems= new ArrayList();
+    List<ItemsModel> franquias = new ArrayList();
+
+    List<Restaurante> restaurantes = new ArrayList();
+    Restaurante restaurante;
 
     CustomAdapter customAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //restaurante = new Restaurante(names[0],desc[0],images[0]);
+        //restaurantes.add(restaurante);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.listview);
 
         for(int i = 0; i < names.length; i++){
-            ItemsModel itemsModel = new ItemsModel(names[i],desc[i],images[i]);
-            listItems.add(itemsModel);
+            restaurante = new Restaurante(names[i],desc[i],images[i]);
+            ItemsModel itemsModel = new ItemsModel(names[i],desc[i],images[i],restaurante);
+            franquias.add(itemsModel);
         }
 
-        customAdapter = new CustomAdapter(listItems,this);
+        customAdapter = new CustomAdapter(franquias,this);
         listView.setAdapter(customAdapter);
     }
 
@@ -84,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public class CustomAdapter extends BaseAdapter implements Filterable {
 
