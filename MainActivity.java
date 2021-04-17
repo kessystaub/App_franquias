@@ -28,91 +28,110 @@ public class MainActivity extends AppCompatActivity {
     String names[]={"mc donals","bobs","burguer king","subway"};
     String desc[]={"amo muito tudo isso","pior que mc","melhor que mc","saudavel"};
 
-    List<ItemsModel> franquias = new ArrayList();
-
-    List<Restaurante> restaurantes = new ArrayList();
+    List<Franquia> franquias = new ArrayList();
+    List<Restaurante> restaurantes_mc = new ArrayList();
+    List<Restaurante> restaurantes_bobs = new ArrayList();
+    List<Restaurante> restaurantes_burguerking = new ArrayList();
+    List<Restaurante> restaurantes_subway = new ArrayList();
     Restaurante restaurante;
-
-    CustomAdapter customAdapter;
+    AdaptadorCustomizado adaptador_customizado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //restaurante = new Restaurante(names[0],desc[0],images[0]);
-        //restaurantes.add(restaurante);
-        restaurante = new Restaurante("cleitin","ola",R.drawable.subway);
-        restaurantes.add(restaurante);
+        restaurante = new Restaurante("Franquia São Paulo","Avenida Paulista","São Paulo",R.drawable.mc);
+        restaurantes_mc.add(restaurante);
+        restaurante = new Restaurante("Franquia Rio de Janeiro","Rua conceicao","Rio de Janeiro",R.drawable.mc);
+        restaurantes_mc.add(restaurante);
+        restaurante = new Restaurante("Franquia Itapema","Rua jovem","Itapema",R.drawable.mc);
+        restaurantes_mc.add(restaurante);
 
+        restaurante = new Restaurante("Franquia Bahia","Rua amada","Bahia",R.drawable.bobs);
+        restaurantes_bobs.add(restaurante);
+        restaurante = new Restaurante("Franquia Santa Catarina","Rua oeste","Joinville",R.drawable.bobs);
+        restaurantes_bobs.add(restaurante);
+        restaurante = new Restaurante("Franquia Santa Cruz do Sul","Rua amarela","Santa Cruz do Sul",R.drawable.bobs);
+        restaurantes_bobs.add(restaurante);
 
+        restaurante = new Restaurante("Franquia Vacaria","Rua espaçoca","Vacaria",R.drawable.burguer);
+        restaurantes_burguerking.add(restaurante);
+        restaurante = new Restaurante("Franquia Balneario Camboriu","Rua coronel","Balneario Camboriu",R.drawable.burguer);
+        restaurantes_burguerking.add(restaurante);
+        restaurante = new Restaurante("Franquia Itajaí","Rua tenente","itajaí",R.drawable.burguer);
+        restaurantes_burguerking.add(restaurante);
+
+        restaurante = new Restaurante("Franquia Paraná","Rua 8223","curitiba",R.drawable.subway);
+        restaurantes_subway.add(restaurante);
+        restaurante = new Restaurante("Franquia Blumenau","Rua carolina","Blumenau",R.drawable.subway);
+        restaurantes_subway.add(restaurante);
+        restaurante = new Restaurante("Franquia Santa Maria","Rua joana","Santa Maria",R.drawable.subway);
+        restaurantes_subway.add(restaurante);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         listView = findViewById(R.id.listview);
 
         for(int i = 0; i < names.length; i++){
-            //restaurante = new Restaurante(names[i],desc[i],images[i]);
-            //funçao random 1 a 3
-            ItemsModel itemsModel = new ItemsModel(names[i],desc[i],images[i],restaurante);
-            franquias.add(itemsModel);
+            if(i==0){
+                Franquia franquia = new Franquia(names[i],desc[i],images[i],restaurantes_mc);
+                franquias.add(franquia);
+            }else if(i==1){
+                Franquia franquia = new Franquia(names[i],desc[i],images[i],restaurantes_bobs);
+                franquias.add(franquia);
+            }else if(i==2){
+                Franquia franquia = new Franquia(names[i],desc[i],images[i],restaurantes_burguerking);
+                franquias.add(franquia);
+            }else if(i==3){
+                Franquia franquia = new Franquia(names[i],desc[i],images[i],restaurantes_subway);
+                franquias.add(franquia);
+            }
         }
 
-        customAdapter = new CustomAdapter(franquias,this);
-        listView.setAdapter(customAdapter);
+        adaptador_customizado = new AdaptadorCustomizado(franquias,this);
+        listView.setAdapter(adaptador_customizado);
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu,menu);
-
         MenuItem menuItem = menu.findItem(R.id.search_view);
-
         SearchView searchView = (SearchView) menuItem.getActionView();
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                customAdapter.getFilter().filter(newText);
-
+                adaptador_customizado.getFilter().filter(newText);
                 return true;
             }
         });
-
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
-
         if(id == R.id.search_view){
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public class AdaptadorCustomizado extends BaseAdapter implements Filterable {
 
-
-
-    public class CustomAdapter extends BaseAdapter implements Filterable {
-
-        private List<ItemsModel> itemsModelList;
-        private List<ItemsModel> itemsModelListFiltered;
+        private List<Franquia> lista_franquia;
+        private List<Franquia> lista_filtrada_franquia;
         private Context context;
 
-        public CustomAdapter(List<ItemsModel> itemsModelList, Context context) {
-            this.itemsModelList = itemsModelList;
-            this.itemsModelListFiltered = itemsModelList;
-            this.context = context;
+        public AdaptadorCustomizado(List<Franquia> lista_franquia, Context contexto) {
+            this.lista_franquia = lista_franquia;
+            this.lista_filtrada_franquia = lista_franquia;
+            this.context = contexto;
         }
 
         @Override
         public int getCount() {
-            return itemsModelListFiltered.size();
+            return lista_filtrada_franquia.size();
         }
 
         @Override
@@ -133,15 +152,15 @@ public class MainActivity extends AppCompatActivity {
             TextView itemName = view.findViewById(R.id.itemName);
             TextView itemDesc = view.findViewById(R.id.itemDesc);
 
-            imageView.setImageResource(itemsModelListFiltered.get(position).getImage());
-            itemName.setText(itemsModelListFiltered.get(position).getName());
-            itemDesc.setText(itemsModelListFiltered.get(position).getDesc());
+            imageView.setImageResource(lista_filtrada_franquia.get(position).getImage());
+            itemName.setText(lista_filtrada_franquia.get(position).getName());
+            itemDesc.setText(lista_filtrada_franquia.get(position).getDesc());
 
             view.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this,ItemViewActivity.class).putExtra("item",itemsModelListFiltered.get(position)));
+                    startActivity(new Intent(MainActivity.this,RestauranteViewActivity.class).putExtra("item", lista_filtrada_franquia.get(position)));
                 }
             });
 
@@ -152,40 +171,31 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Filter getFilter() {
             Filter filter = new Filter() {
-
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
-
                     FilterResults filterResults = new FilterResults();
-
                     if (constraint == null || constraint.length() == 0) {
-                        filterResults.count = itemsModelList.size();
-                        filterResults.values = itemsModelList;
+                        filterResults.count = lista_franquia.size();
+                        filterResults.values = lista_franquia;
                     } else {
                         String searchStr = constraint.toString().toLowerCase();
-
-                        List<ItemsModel> resultData = new ArrayList<>();
-
-                        for (ItemsModel itemsModel : itemsModelList) {
+                        List<Franquia> resultData = new ArrayList<>();
+                        for (Franquia itemsModel : lista_franquia) {
                             if (itemsModel.getName().contains(searchStr) || itemsModel.getDesc().contains(searchStr)) {
                                 resultData.add(itemsModel);
                             }
-
                             filterResults.count = resultData.size();
                             filterResults.values = resultData;
                         }
                     }
                     return filterResults;
                 }
-
                 @Override
                 protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    itemsModelListFiltered = (List<ItemsModel>) results.values;
+                    lista_filtrada_franquia = (List<Franquia>) results.values;
                     notifyDataSetChanged();
                 }
             };
-
             return filter;
         }
     }
