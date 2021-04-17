@@ -3,11 +3,10 @@ package com.example.myproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsModel implements Parcelable {
+public class Franquia implements Parcelable {
     private String name;
     private String desc;
     private int image;
@@ -16,37 +15,29 @@ public class ItemsModel implements Parcelable {
     public List<Restaurante> restaurantes = new ArrayList();
 
 
-    public ItemsModel(String name, String desc, int image, Restaurante restaurante) {
+    public Franquia(String name, String desc, int image, List<Restaurante> restaurantes) {
         this.name = name;
         this.desc = desc;
         this.image = image;
-        //this.restaurantes = restaurantes;
-        this.test=new Restaurante(restaurante.name,restaurante.desc,restaurante.image);
-        this.restaurantes.add(test);
-        this.test=new Restaurante(restaurante.name,restaurante.desc,restaurante.image);
-        this.restaurantes.add(test);
-        this.test=new Restaurante(restaurante.name,restaurante.desc,restaurante.image);
-        this.restaurantes.add(test);
-        this.test=new Restaurante(restaurante.name,restaurante.desc,restaurante.image);
-        this.restaurantes.add(test);
+        this.restaurantes = restaurantes;
     }
 
-    protected ItemsModel(Parcel in) {
+    protected Franquia(Parcel in) {
         name = in.readString();
         desc = in.readString();
         image = in.readInt();
         in.readTypedList(restaurantes, Restaurante.CREATOR);
     }
 
-    public static final Creator<ItemsModel> CREATOR = new Creator<ItemsModel>() {
+    public static final Creator<Franquia> CREATOR = new Creator<Franquia>() {
         @Override
-        public ItemsModel createFromParcel(Parcel in) {
-            return new ItemsModel(in);
+        public Franquia createFromParcel(Parcel in) {
+            return new Franquia(in);
         }
 
         @Override
-        public ItemsModel[] newArray(int size) {
-            return new ItemsModel[size];
+        public Franquia[] newArray(int size) {
+            return new Franquia[size];
         }
     };
 
@@ -93,3 +84,4 @@ public class ItemsModel implements Parcelable {
         dest.writeTypedList(restaurantes);
     }
 }
+
