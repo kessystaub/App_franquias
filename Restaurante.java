@@ -5,19 +5,38 @@ import android.os.Parcelable;
 
 public class Restaurante implements Parcelable {
     public String name;
-    public String desc;
+    public String adress;
+    public String city;
     public int image;
 
-    public Restaurante(String name, String desc, int image) {
+    public Restaurante(String name, String adress, String city, int image) {
         this.name = name;
-        this.desc = desc;
+        this.adress = adress;
+        this.city = city;
         this.image = image;
     }
 
     protected Restaurante(Parcel in) {
         name = in.readString();
-        desc = in.readString();
+        adress = in.readString();
+        city = in.readString();
         image = in.readInt();
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public static final Creator<Restaurante> CREATOR = new Creator<Restaurante>() {
@@ -40,14 +59,6 @@ public class Restaurante implements Parcelable {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public int getImage() {
         return image;
     }
@@ -64,7 +75,8 @@ public class Restaurante implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(desc);
+        dest.writeString(adress);
+        dest.writeString(city);
         dest.writeInt(image);
     }
 }
